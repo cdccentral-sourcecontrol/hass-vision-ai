@@ -1,0 +1,98 @@
+# Vision AI — Baseline Snapshot Capture (every 15 minutes) — EXAMPLE
+# Captures a "quiet" reference image for each snapshot-capable camera.
+# Used by the temporal comparison system — the main automation
+# sends [baseline, prior, current] to the AI so it can distinguish new
+# objects from those already present in the scene.
+#
+# Condition: skips capture if a detection occurred in the last 5 minutes
+# (avoids storing an active scene as the "quiet" baseline).
+#
+# Saves 3 files per camera per capture:
+#   1. Media mount overwriting baseline: {cam}_baseline.jpg
+#   2. Media mount timestamped archival: {cam}_baseline_{TS}.jpg
+#   3. Local timestamped:                {cam}_baseline_{TS}.jpg
+#
+# EXAMPLE cameras below (camera.driveway, camera.backyard) — rename to yours.
+# Only cameras that support camera.snapshot belong here.
+
+alias: "Vision: Baseline Snapshot Capture"
+description: >-
+  Captures quiet baseline reference images every 15 minutes for EXAMPLE
+  snapshot-capable cameras. Used by temporal comparison to distinguish new
+  activity from existing scene. Skips capture if a detection occurred within
+  the last 5 minutes. Rename camera/entity IDs and paths before deploying.
+id: vision_baseline_snapshots
+mode: single
+max_exceeded: silent
+
+triggers:
+  - trigger: time_pattern
+    minutes: "/15"
+
+actions:
+  - variables:
+      baseline_ts: "{{ now().strftime('%Y%m%d_%H%M%S') }}"
+
+  # --- EXAMPLE: Driveway Camera ---
+  - if:
+      - condition: template
+        value_template: >-
+          {% set last = states('input_datetime.vision_last_detection_driveway') %}
+          {% if last in ['unknown', 'unavailable', 'None', ''] %}
+            true
+          {% else %}
+            {{ (as_timestamp(now()) - as_timestamp(last)) > 300 }}
+          {% endif %}
+    then:
+      - action: camera.snapshot
+        target:
+          entity_id: camera.driveway
+        data:
+          filename: "/media/YOUR_MEDIA_MOUNT/vision_ai/snapshots/driveway_baseline.jpg"
+      - action: camera.snapshot
+        target:
+          entity_id: camera.driveway
+        data:
+          filename: "/media/YOUR_MEDIA_MOUNT/vision_ai/snapshots/driveway_baseline_{{ baseline_ts }}.jpg"
+      - action: camera.snapshot
+        target:
+          entity_id: camera.driveway
+        data:
+          filename: "/config/www/snapshots/driveway_baseline_{{ baseline_ts }}.jpg"
+      - action: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.vision_last_baseline_driveway
+        data:
+          datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
+
+  # --- EXAMPLE: Backyard Camera ---
+  - if:
+      - condition: template
+        value_template: >-
+          {% set last = states('input_datetime.vision_last_detection_backyard') %}
+          {% if last in ['unknown', 'unavailable', 'None', ''] %}
+            true
+          {% else %}
+            {{ (as_timestamp(now()) - as_timestamp(last)) > 300 }}
+          {% endif %}
+    then:
+      - action: camera.snapshot
+        target:
+          entity_id: camera.backyard
+        data:
+          filename: "/media/YOUR_MEDIA_MOUNT/vision_ai/snapshots/backyard_baseline.jpg"
+      - action: camera.snapshot
+        target:
+          entity_id: camera.backyard
+        data:
+          filename: "/media/YOUR_MEDIA_MOUNT/vision_ai/snapshots/backyard_baseline_{{ baseline_ts }}.jpg"
+      - action: camera.snapshot
+        target:
+          entity_id: camera.backyard
+        data:
+          filename: "/config/www/snapshots/backyard_baseline_{{ baseline_ts }}.jpg"
+      - action: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.vision_last_baseline_backyard
+        data:
+          datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"

@@ -1,0 +1,109 @@
+# Vision AI — Live Scene Input Numbers (EXAMPLE)
+# Add to configuration.yaml under `input_number:`
+# Managed by vision_live_scene_tracker automation (real-time re-poll)
+#
+# Keys and names below are EXAMPLES — rename to match your cameras before deploying.
+
+# EXAMPLE: driveway
+driveway_people_live:
+  name: EXAMPLE_Driveway People Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+driveway_vehicles_live:
+  name: EXAMPLE_Driveway Vehicles Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+driveway_animals_live:
+  name: EXAMPLE_Driveway Animals Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+
+# EXAMPLE: backyard
+backyard_people_live:
+  name: EXAMPLE_Backyard People Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+backyard_vehicles_live:
+  name: EXAMPLE_Backyard Vehicles Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+backyard_animals_live:
+  name: EXAMPLE_Backyard Animals Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+
+# EXAMPLE: front_yard
+front_yard_people_live:
+  name: EXAMPLE_Front Yard People Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+front_yard_vehicles_live:
+  name: EXAMPLE_Front Yard Vehicles Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+front_yard_animals_live:
+  name: EXAMPLE_Front Yard Animals Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+
+# EXAMPLE: garage
+garage_people_live:
+  name: EXAMPLE_Garage People Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+garage_vehicles_live:
+  name: EXAMPLE_Garage Vehicles Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+garage_animals_live:
+  name: EXAMPLE_Garage Animals Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+
+# EXAMPLE: front_door (people only)
+front_door_people_live:
+  name: EXAMPLE_Front Door People Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+
+# EXAMPLE: indoor_a (people only)
+indoor_a_people_live:
+  name: EXAMPLE_Indoor A People Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box
+
+# EXAMPLE: indoor_b (people only)
+indoor_b_people_live:
+  name: EXAMPLE_Indoor B People Live
+  min: 0
+  max: 50
+  step: 1
+  mode: box

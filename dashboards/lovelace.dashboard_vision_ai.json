@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace.dashboard_vision_ai",
+  "data": {
+    "config": {
+      "views": [
+        {
+          "title": "Dashboard",
+          "path": "vision-ai",
+          "type": "panel",
+          "icon": "mdi:view-dashboard",
+          "cards": [
+            {
+              "type": "iframe",
+              "url": "http://YOUR_VISION_DASHBOARD_HOST:8580/?token=__VISION_TOKEN__",
+              "aspect_ratio": "100%"
+            }
+          ]
+        },
+        {
+          "title": "Cameras",
+          "path": "cameras",
+          "type": "panel",
+          "icon": "mdi:cctv",
+          "cards": [
+            {
+              "type": "iframe",
+              "url": "http://YOUR_VISION_DASHBOARD_HOST:8580/cameras?token=__VISION_TOKEN__",
+              "aspect_ratio": "100%"
+            }
+          ]
+        },
+        {
+          "title": "AI Gallery",
+          "path": "ai-gallery",
+          "type": "panel",
+          "icon": "mdi:image-multiple",
+          "cards": [
+            {
+              "type": "iframe",
+              "url": "http://YOUR_VISION_DASHBOARD_HOST:8580/cameras?view=ai_images&token=__VISION_TOKEN__",
+              "aspect_ratio": "100%"
+            }
+          ]
+        },
+        {
+          "title": "Detections",
+          "path": "detections",
+          "type": "panel",
+          "icon": "mdi:motion-sensor",
+          "cards": [
+            {
+              "type": "iframe",
+              "url": "http://YOUR_VISION_DASHBOARD_HOST:8580/cameras?camera=YOUR_CAMERA_ID&view=detections&token=__VISION_TOKEN__",
+              "aspect_ratio": "100%"
+            }
+          ]
+        },
+        {
+          "title": "Baselines",
+          "path": "baselines",
+          "type": "panel",
+          "icon": "mdi:image-filter-hdr",
+          "cards": [
+            {
+              "type": "iframe",
+              "url": "http://YOUR_VISION_DASHBOARD_HOST:8580/cameras?camera=YOUR_CAMERA_ID&view=baselines&token=__VISION_TOKEN__",
+              "aspect_ratio": "100%"
+            }
+          ]
+        },
+        {
+          "type": "sections",
+          "title": "Settings",
+          "path": "settings",
+          "icon": "mdi:cog",
+          "max_columns": 2,
+          "sections": [
+            {
+              "type": "grid",
+              "cards": [
+                {
+                  "type": "heading",
+                  "heading": "AI Controls",
+                  "heading_style": "title",
+                  "icon": "mdi:robot"
+                },
+                {
+                  "type": "tile",
+                  "entity": "input_boolean.garage_door_ai_enabled",
+                  "name": "Garage Door AI Control",
+                  "icon": "mdi:garage-variant",
+                  "color": "green"
+                },
+                {
+                  "type": "tile",
+                  "entity": "input_boolean.notifications_enabled",
+                  "name": "Vision Notifications",
+                  "icon": "mdi:bell",
+                  "color": "blue"
+                }
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {
+                  "type": "heading",
+                  "heading": "Garage Door Status",
+                  "heading_style": "title",
+                  "icon": "mdi:garage-variant"
+                },
+                {
+                  "type": "tile",
+                  "entity": "input_select.garage_door_ai_state",
+                  "name": "Last AI State",
+                  "icon": "mdi:garage-variant"
+                },
+                {
+                  "type": "tile",
+                  "entity": "script.garage_door_ai_control",
+                  "name": "Check Garage Door",
+                  "icon": "mdi:eye-check",
+                  "tap_action": {
+                    "action": "perform-action",
+                    "perform_action": "script.garage_door_ai_control",
+                    "data": {
+                      "action": "check"
+                    }
+                  },
+                  "color": "cyan"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

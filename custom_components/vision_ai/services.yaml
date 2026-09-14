@@ -1,0 +1,142 @@
+record_detection:
+  name: Record Detection
+  description: >-
+    Record an AI vision detection event to the SQLite database.
+    Called by the vision automation after each AI analysis.
+  fields:
+    timestamp:
+      name: Timestamp
+      description: ISO 8601 timestamp of the detection
+      required: true
+      selector:
+        text:
+    camera:
+      name: Camera Entity
+      description: Camera entity ID (e.g. camera.front_door)
+      required: true
+      selector:
+        text:
+    area:
+      name: Area
+      description: Area name (e.g. Driveway, Backyard)
+      required: true
+      selector:
+        text:
+    det_type:
+      name: Detection Type
+      description: Type of detection (person, vehicle, animal, motion, chime)
+      required: true
+      selector:
+        select:
+          options:
+            - person
+            - vehicle
+            - animal
+            - motion
+            - chime
+            - sound
+    people_count:
+      name: People Count
+      description: Number of people detected by AI
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 100
+    vehicle_count:
+      name: Vehicle Count
+      description: Number of vehicles detected by AI
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 100
+    animal_count:
+      name: Animal Count
+      description: Number of animals detected by AI
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 100
+    detected_objects:
+      name: Detected Objects
+      description: Comma-separated list of detected object types
+      required: false
+      selector:
+        text:
+    analysis_text:
+      name: Analysis Text
+      description: Full AI analysis text from Gemini/GPT/Grok
+      required: false
+      selector:
+        text:
+          multiline: true
+    snapshot_path:
+      name: Snapshot Path
+      description: Path to the saved snapshot image
+      required: false
+      selector:
+        text:
+
+query_detections:
+  name: Query Detections
+  description: >-
+    Query recent detection records from the database.
+    Returns a list of detection objects.
+  fields:
+    camera:
+      name: Camera
+      description: Filter by camera entity ID (optional)
+      required: false
+      selector:
+        text:
+    det_type:
+      name: Detection Type
+      description: Filter by detection type (optional)
+      required: false
+      selector:
+        select:
+          options:
+            - person
+            - vehicle
+            - animal
+            - motion
+            - chime
+            - sound
+    hours:
+      name: Hours
+      description: Look back this many hours (default 24)
+      required: false
+      default: 24
+      selector:
+        number:
+          min: 1
+          max: 720
+    limit:
+      name: Limit
+      description: Maximum number of records to return (default 100, max 1000)
+      required: false
+      default: 100
+      selector:
+        number:
+          min: 1
+          max: 1000
+
+get_stats:
+  name: Get Stats
+  description: >-
+    Get summary statistics (totals) for a given time window.
+  fields:
+    hours:
+      name: Hours
+      description: Time window in hours (default 24)
+      required: false
+      default: 24
+      selector:
+        number:
+          min: 1
+          max: 720

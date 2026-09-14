@@ -1,0 +1,71 @@
+# Vision AI — Last AI Analysis Text Helpers (EXAMPLE)
+# Add to configuration.yaml under `input_text:`
+# Written by vision_ai_camera_analysis automation after each AI analysis
+#
+# Keys and names below are EXAMPLES — rename to match your cameras before deploying.
+# Automation writes input_text.vision_last_{{ camera_name }} — keep keys in sync.
+
+# Last analysis text per camera (max 255 chars, truncated from full analysis)
+vision_last_driveway:
+  name: EXAMPLE_Vision Last Driveway
+  max: 255
+  icon: mdi:eye
+
+vision_last_backyard:
+  name: EXAMPLE_Vision Last Backyard
+  max: 255
+  icon: mdi:eye
+
+vision_last_front_door:
+  name: EXAMPLE_Vision Last Front Door
+  max: 255
+  icon: mdi:eye
+
+vision_last_front_yard:
+  name: EXAMPLE_Vision Last Front Yard
+  max: 255
+  icon: mdi:eye
+
+vision_last_garage:
+  name: EXAMPLE_Vision Last Garage
+  max: 255
+  icon: mdi:eye
+
+vision_last_indoor_a:
+  name: EXAMPLE_Vision Last Indoor A
+  max: 255
+  icon: mdi:eye
+
+vision_last_indoor_b:
+  name: EXAMPLE_Vision Last Indoor B
+  max: 255
+  icon: mdi:eye
+
+# Last detection type + timestamp per camera
+vision_last_type_driveway:
+  name: EXAMPLE_Vision Last Type Driveway
+  max: 255
+
+vision_last_type_backyard:
+  name: EXAMPLE_Vision Last Type Backyard
+  max: 255
+
+vision_last_type_front_door:
+  name: EXAMPLE_Vision Last Type Front Door
+  max: 255
+
+vision_last_type_front_yard:
+  name: EXAMPLE_Vision Last Type Front Yard
+  max: 255
+
+vision_last_type_garage:
+  name: EXAMPLE_Vision Last Type Garage
+  max: 255
+
+vision_last_type_indoor_a:
+  name: EXAMPLE_Vision Last Type Indoor A
+  max: 255
+
+vision_last_type_indoor_b:
+  name: EXAMPLE_Vision Last Type Indoor B
+  max: 255

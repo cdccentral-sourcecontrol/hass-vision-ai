@@ -1,0 +1,22 @@
+# Vision AI — Cleanup Old Snapshots (daily at 3 AM)
+# Deletes timestamped snapshot files:
+#   Local HAOS (/config/www/snapshots/): >7 days (disk limited)
+#   Optional media mount (/media/YOUR_MEDIA_MOUNT/snapshots/): longer retention
+# Preserves in-place files: *_latest.jpg, *_baseline.jpg, *_prior.jpg
+# AI pipeline unaffected — uses media-source:// live frames, not saved files.
+#
+# Adjust retention and paths in helpers/shell_commands.yaml to match your setup.
+
+alias: "Vision: Cleanup Old Snapshots"
+description: >-
+  Daily cleanup of timestamped snapshot files older than 7 days.
+  Preserves *_latest.jpg. Runs at 3:00 AM to avoid peak detection hours.
+id: vision_cleanup_old_snapshots
+mode: single
+
+triggers:
+  - trigger: time
+    at: "03:00:00"
+
+actions:
+  - action: shell_command.cleanup_old_snapshots

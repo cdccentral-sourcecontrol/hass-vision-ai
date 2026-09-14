@@ -1,0 +1,33 @@
+id: vision_reset_daily_detection_counters
+alias: 'Vision: Reset Daily Detection Counters'
+description: >-
+  Resets all daily detection counters (global + per-area EXAMPLE counters) at
+  midnight. Rename EXAMPLE counter entity IDs to match your helpers before
+  deploying. Live counts (input_number) are NOT reset here — they are managed
+  by the live tracker automation.
+triggers:
+- trigger: time
+  at: 00:00:00
+actions:
+- action: counter.reset
+  target:
+    entity_id:
+    - counter.people_detected_today
+    - counter.vehicles_detected_today
+    - counter.animals_detected_today
+    - counter.driveway_people_today
+    - counter.driveway_vehicles_today
+    - counter.driveway_animals_today
+    - counter.backyard_people_today
+    - counter.backyard_vehicles_today
+    - counter.backyard_animals_today
+    - counter.front_yard_people_today
+    - counter.front_yard_vehicles_today
+    - counter.front_yard_animals_today
+    - counter.garage_people_today
+    - counter.garage_vehicles_today
+    - counter.garage_animals_today
+    - counter.front_door_people_today
+    - counter.indoor_a_people_today
+    - counter.indoor_b_people_today
+mode: single

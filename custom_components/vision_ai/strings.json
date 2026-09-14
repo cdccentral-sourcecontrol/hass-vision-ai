@@ -1,0 +1,25 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Vision AI Detection Database",
+        "description": "This integration creates a local SQLite database to store AI camera detection history with full metadata. No configuration needed — just click Submit.",
+        "data": {}
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Vision AI Settings",
+        "description": "Configure optional features for Vision AI.",
+        "data": {
+          "bird_buddy_enabled": "Enable Bird Buddy integration"
+        },
+        "data_description": {
+          "bird_buddy_enabled": "When enabled, Bird Buddy visitor detections are recorded in the Vision AI database and shown on the Vision Dashboard."
+        }
+      }
+    }
+  }
+}

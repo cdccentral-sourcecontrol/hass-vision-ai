@@ -1,0 +1,11 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Vision AI Detection Database",
+        "description": "This integration creates a local SQLite database to store AI camera detection history with full metadata. No configuration needed — just click Submit.",
+        "data": {}
+      }
+    }
+  }
+}

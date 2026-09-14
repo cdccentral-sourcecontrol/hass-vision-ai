@@ -1,0 +1,16 @@
+# Vision AI — Input Booleans
+# Add to configuration.yaml under `input_boolean:`
+
+# Master notification toggle — when off, vision automation skips entirely
+notifications_enabled:
+  name: Notifications Enabled
+  initial: on
+  icon: mdi:bell
+
+# Garage door AI control toggle — when off, voice commands to open/close/check
+# the garage door will be ignored. Useful for users without HomeLink or
+# a camera-visible garage door.
+garage_door_ai_enabled:
+  name: Garage Door AI Control
+  initial: on
+  icon: mdi:garage-variant

@@ -1,0 +1,9 @@
+# Vision AI — Timers
+# Add to configuration.yaml under `timer:`
+
+# TTS cooldown: prevents repeated TTS announcements within 3 minutes
+# Doorbell chime is exempt from this cooldown (always announces)
+tts_vision_cooldown:
+  name: TTS Vision Cooldown
+  duration: "00:03:00"
+  icon: mdi:timer

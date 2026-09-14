@@ -1,0 +1,147 @@
+# EXAMPLE — Garage Door AI Control
+# Optional pattern: AI camera analysis verifies door state before toggling
+# a garage opener button (HomeLink, MyQ, relay, etc.).
+#
+# Adapt all entity IDs below to your installation before use.
+#
+# Flow:
+#   1. User voice command → custom sentence matches → GarageDoor intent
+#   2. Intent script says "Checking..." immediately (async_action: true)
+#   3. Script takes snapshot from garage camera
+#   4. Vision/AI service determines if door is open or closed
+#   5. Conditionally presses garage opener button
+#   6. Sends result via TTS + persistent notification
+#
+# Placeholder entities (REPLACE):
+#   - camera.YOUR_GARAGE_CAMERA
+#   - button.YOUR_GARAGE_OPENER
+#   - media_player.YOUR_TTS_MEDIA_PLAYER
+#   - xai_conversation.photo_analysis  (or your preferred vision service)
+#
+# Intent: GarageDoor (register in custom_sentences/en/intents.yaml)
+# Slot: action = open | close | check
+
+# ===========================================================
+# PART 1: intent_script entry — add to /config/intents.yaml
+# ===========================================================
+# GarageDoor:
+#   async_action: true
+#   speech:
+#     text: "Checking the garage camera now."
+#   action:
+#     - action: script.garage_door_ai_control
+#       data:
+#         action: "{{ action | default('check') }}"
+
+# ===========================================================
+# PART 2: Script — add to /config/scripts.yaml
+# ===========================================================
+garage_door_ai_control:
+  alias: "Garage Door AI Control"
+  description: >-
+    AI-verified garage door control. Takes a camera snapshot, asks AI if the
+    door is open or closed, then toggles the opener only if needed.
+    Sends result via TTS broadcast and persistent notification.
+  mode: single
+  fields:
+    action:
+      description: "Requested action: open, close, or check"
+      example: "open"
+      selector:
+        select:
+          options:
+            - open
+            - close
+            - check
+  sequence:
+    # 0. Check if feature is enabled
+    - condition: state
+      entity_id: input_boolean.garage_door_ai_enabled
+      state: "on"
+
+    # 1. Save snapshot from garage camera
+    - action: camera.snapshot
+      target:
+        entity_id: camera.YOUR_GARAGE_CAMERA
+      data:
+        filename: /config/www/garage_door_check.jpg
+
+    # 2. Small delay for snapshot to write
+    - delay:
+        seconds: 1
+
+    # 3. Ask AI to analyze the garage door state
+    - action: xai_conversation.photo_analysis
+      data:
+        prompt: >-
+          Look at this garage door image. Is the garage door OPEN or CLOSED?
+          Reply with exactly one word: OPEN or CLOSED.
+        images:
+          - /config/www/garage_door_check.jpg
+        temperature: 0.1
+      response_variable: ai_result
+
+    # 4. Parse AI response to determine door state
+    - variables:
+        door_is_open: >-
+          {{ 'open' in (ai_result.analysis | default('unknown') | lower) }}
+        requested_action: "{{ action | default('check') | lower }}"
+
+    # 4b. Record last-known state for dashboard badges
+    - action: input_select.select_option
+      target:
+        entity_id: input_select.garage_door_ai_state
+      data:
+        option: "{{ 'Open' if door_is_open else 'Closed' }}"
+
+    # 5. Determine response message and whether to act
+    - choose:
+        # --- CHECK: just report ---
+        - conditions:
+            - condition: template
+              value_template: "{{ requested_action == 'check' }}"
+          sequence:
+            - variables:
+                response_message: >-
+                  The garage door appears to be {{ 'open' if door_is_open else 'closed' }}.
+
+        # --- OPEN but already open ---
+        - conditions:
+            - condition: template
+              value_template: "{{ requested_action == 'open' and door_is_open }}"
+          sequence:
+            - variables:
+                response_message: "The garage door is already open."
+
+        # --- CLOSE but already closed ---
+        - conditions:
+            - condition: template
+              value_template: "{{ requested_action == 'close' and not door_is_open }}"
+          sequence:
+            - variables:
+                response_message: "The garage door is already closed."
+
+      # --- DEFAULT: action needed, press opener ---
+      default:
+        - action: button.press
+          target:
+            entity_id: button.YOUR_GARAGE_OPENER
+
+        - variables:
+            response_message: >-
+              {{ 'Opening' if requested_action == 'open' else 'Closing' }}
+              the garage door now.
+
+    # 6. Send result via TTS broadcast
+    - action: tts.speak
+      target:
+        entity_id: tts.piper
+      data:
+        media_player_entity_id: media_player.YOUR_TTS_MEDIA_PLAYER
+        message: "{{ response_message }}"
+
+    # 7. Send persistent notification
+    - action: notify.persistent_notification
+      data:
+        title: "Garage Door"
+        message: "{{ response_message }}"
