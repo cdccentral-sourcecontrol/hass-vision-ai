@@ -27,6 +27,7 @@ class VisionAIConfigFlow(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle the initial step — no configuration needed."""
+        # Only allow a single instance
         await self.async_set_unique_id(DOMAIN)
         self._abort_if_unique_id_configured()
 
